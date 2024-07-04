@@ -26,7 +26,10 @@ class PostDetailView(GenericAPIView):
         serializer = self.serializer_class(post)
         return Response(serializer.data)
 
-class RulesPostsView(ListAPIView):
+class RulesPostsView(GenericAPIView):
     serializer_class = PostSerializer
-    latest_rule_post = Post.objects.filter(type='rule', state='published').order_by('-date_created').first()
-    pagination_class = PostsPagination
+    queryset = Post.objects.filter(type='rule', state='published').order_by('-date_created').first()
+    def get(self, request, slug):
+        post = self.get_object()
+        serializer = self.serializer_class(post)
+        return Response(serializer.data)
