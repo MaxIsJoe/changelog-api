@@ -25,3 +25,8 @@ class PostDetailView(GenericAPIView):
         post = self.get_object()
         serializer = self.serializer_class(post)
         return Response(serializer.data)
+
+class RulesPostsView(ListAPIView):
+    serializer_class = PostSerializer
+    queryset = Post.objects.filter(type="rules").order_by('-date_created')
+    pagination_class = PostsPagination
